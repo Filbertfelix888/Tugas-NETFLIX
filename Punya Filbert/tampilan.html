@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Pengaturan dasar untuk tampilan web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Sederhana - Belajar Horizontal Scroll (Bootstrap 5)</title>
+    
+    <!-- Memuat file CSS Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- Memuat Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- CSS KUSTOM -->
+    <style>
+        /* Mengatur seluruh body menggunakan font sans-serif bawaan Bootstrap dan latar belakang hitam */
+        body {
+            background-color: #141414; /* Warna hitam gelap, khas situs streaming */
+            color: #ffffff; /* Warna teks putih */
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Mencegah scroll horizontal body utama */
+        }
+
+        /* Mengatur navbar agar transparan di bagian atas */
+        .navbar-custom {
+            background-color: rgba(20, 20, 20, 0.9) !important;
+            padding: 1rem 3rem; /* Padding lebih besar */
+            transition: background-color 0.3s;
+        }
+
+        /* Mengatur judul di setiap bagian konten */
+        .section-title {
+            font-size: 1.5rem; /* Ukuran font yang pas */
+            font-weight: 600; /* Tebal sedikit */
+            margin-bottom: 1rem; /* Jarak bawah judul */
+            padding-left: 3rem; /* Agar sejajar dengan konten */
+        }
+        
+        /* Mengatur baris konten (row) agar memiliki jarak atas/bawah */
+        .content-row {
+            padding: 2.5rem 0 0.5rem 0; /* Jarak atas dan bawah untuk setiap baris */
+        }
+        
+        /* Gaya untuk card film Horizontal (BERLAKU UNTUK SEMUA KATEGORI) */
+        .card-horizontal-item {
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow: hidden;
+            border-radius: 0.5rem; /* Sudut melengkung */
+            background-color: #222; /* Latar belakang card sedikit lebih terang */
+        }
+
+        .card-horizontal-item:hover {
+            transform: scale(1.05); /* Sedikit membesar saat di-hover */
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+            z-index: 10; /* Pastikan card yang di-hover muncul di atas */
+        }
+        
+        /* Gaya untuk gambar horizontal (semua kategori) */
+        .card-horizontal-item .card-img-content {
+            width: 100%;
+            height: auto;
+            /* Rasio landscape yang lebih datar (16:10) */
+            aspect-ratio: 16/10; 
+            object-fit: cover;
+        }
+
+        /* Gaya kustom untuk scrollbar horizontal (hanya WebKit) */
+        .custom-scroll-track::-webkit-scrollbar {
+            height: 6px; /* Tinggi scrollbar horizontal */
+        }
+        .custom-scroll-track::-webkit-scrollbar-thumb {
+            background: #444; /* Warna scrollbar thumb */
+            border-radius: 3px;
+        }
+        .custom-scroll-track::-webkit-scrollbar-track {
+            background: #1e1e1e; /* Warna latar belakang scrollbar */
+        }
+
+        /* Responsive width classes for scrollable items (PENTING untuk tata letak responsif) */
+        .scroll-item {
+            /* Mencegah item mengecil saat scroll */
+            flex-shrink: 0;
+            /* Lebar default (Mobile: 2 item per baris) */
+            width: calc(50vw - 2.25rem); /* 50% vw dikurangi padding kiri/kanan dan setengah gap */
+        }
+
+        /* Untuk tablet (>= 768px): 3 item per baris */
+        @media (min-width: 768px) {
+            .scroll-item {
+                width: calc(33.33vw - 2.25rem); /* Sekitar 33.33% vw dikurangi padding/gap */
+            }
+        }
+
+        /* Untuk desktop (>= 992px): 5 item per baris */
+        @media (min-width: 992px) {
+            .scroll-item {
+                width: calc(20vw - 2.25rem); /* Sekitar 20% vw dikurangi padding/gap */
+                max-width: 260px; /* Batasan maksimum agar tidak terlalu lebar di layar besar */
+            }
+        }
+        /* ======================================================== */
+
+        /* Gaya untuk logo 'N' besar menggunakan elemen <i> */
+        .logo-icon-n {
+            font-size: 2.5rem;
+            color: #E50914; /* Merah terang khas Netflix */
+            font-weight: 900; /* Ekstra tebal */
+            line-height: 1;
+            font-style: normal; /* Mencegah 'N' menjadi miring (italic) */
+        }
+        
+        /* Gaya font kustom untuk judul besar "THE PROSECUTOR" */
+        .hero-title {
+            font-size: clamp(3rem, 7vw, 7rem);
+            font-weight: 900;
+            line-height: 0.9;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        
+        /* Gaya untuk tombol utama (Play) */
+        .btn-custom-play {
+            background-color: white;
+            color: black;
+            font-weight: bold;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-custom-play:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
+        }
+        
+        /* Gaya untuk tombol Info */
+        .btn-custom-info {
+            background-color: rgba(109, 109, 110, 0.7);
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn-custom-info:hover {
+            background-color: rgba(109, 109, 110, 0.5);
+            color: white;
+        }
+        
+        /* Gambar latar belakang Hero Section */
+        .hero-background {
+            background-image: url('https://picsum.photos/id/401/600/400');
+            background-size: cover;
+            background-position: top center;
+            height: 90vh;
+            position: relative;
+        }
+        
+        /* Overlay hitam/gelap di atas gambar Hero */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(20, 20, 20, 0.9) 0%, rgba(20, 20, 20, 0.3) 50%, rgba(20, 20, 20, 0) 100%);
+        }
+        
+        /* Gradient di bagian bawah agar transisi ke konten bawah mulus */
+        .hero-bottom-gradient {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 15%;
+            background: linear-gradient(to top, #141414, transparent);
+        }
+        
+        /* Mengatur posisi konten teks di Hero */
+        .hero-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding-left: 5%;
+            padding-right: 5%;
+            z-index: 1; /* Pastikan di atas overlay */
+        }
+
+        /* Gaya tambahan untuk emoji */
+        .icon-small {
+            font-size: 1.25rem;
+            line-height: 1;
+            display: inline-block;
+        }
+        .icon-large {
+            font-size: 1.5rem;
+            line-height: 1;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- BAGIAN 1: NAVBAR -->
+    <!-- ============================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+        <div class="container-fluid px-5">
+            <!-- Logo/Nama Brand: Menggunakan tag <i> sesuai permintaan -->
+            <a class="navbar-brand me-4" href="#">
+                <!-- Menggunakan kelas kustom untuk styling logo 'N' yang khas -->
+                <i class="logo-icon-n">NETFLIX</i>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu Navigasi -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shows</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Movies</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="games.html">Games</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">New & Popular</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My List</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#">Browse by Languages</a>
+                    </li>
+                </ul>
+                
+                <!-- Search dan User Icon di sisi kanan -->
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html"><span class="icon-small" role="img" aria-label="Cari">🔍</span></a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#">Kids</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#"><span class="icon-small" role="img" aria-label="Notifikasi">🔔</span></a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <!-- Dropdown sederhana untuk akun pengguna (Avatar placeholder) -->
+                        <a class="nav-link p-0" href="../Punya Chelsea/PROFILE/Profile.html">
+                            <img src="https://placehold.co/30x30/606060/ffffff?text=U" class="rounded-2" alt="User Profile" style="width: 30px; height: 30px; object-fit: cover;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Container utama untuk seluruh konten di bawah navbar -->
+    <div class="container-fluid p-0">
+        
+        <!-- ============================================== -->
+        <!-- BAGIAN 2: HERO SECTION (Konten Utama) -->
+        <!-- ============================================== -->
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+            
+            <!-- Konten Teks dan Tombol -->
+            <div class="hero-content">
+                <div class="col-lg-6 col-md-8 col-12">
+                    <!-- Judul Utama Sesuai Gambar -->
+                    <h1 class="hero-title mb-3">THE PROSECUTOR</h1>
+                    <h5 class="text-white fw-semibold mb-3">Most Liked</h5>
+                    <p class="lead mb-4 d-none d-sm-block text-white" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">
+                        A detective-turned-prosecutor investigates a suspected wrongful conviction and relies on a brutal set of skills in the face of power and corruption.
+                    </p>
+                    <!-- Grup Tombol Disesuaikan -->
+                    <div class="d-flex gap-3">
+                        <a href="..//Punya Shellyn/play.html">
+                            <button class="btn btn-custom-play btn-lg fw-bold px-4 py-2 rounded-2">
+                                <span class="icon-large me-2" role="img" aria-label="Putar">▶️</span>
+                                Play
+                            </button>
+                        </a>
+                        <a href="..//Punya Chelsea/DETAILFILM/DetailFilm.html">
+                            <button class="btn btn-custom-info btn-lg fw-bold px-4 py-2 rounded-2">
+                                <span class="icon-large me-2" role="img" aria-label="Informasi">ℹ️</span>
+                                More Info
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gradient di bagian bawah agar transisi ke konten bawah mulus -->
+            <div class="hero-bottom-gradient"></div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- BAGIAN 3: KONTEN KATEGORI - SEMUA CARD DIUBAH MENJADI SCROLLER HORIZONTAL -->
+        <!-- ============================================== -->
+
+        <!-- Baris 1: Scary US Mystery Movies (Format Horizontal Scroll) -->
+        <div class="content-row">
+            <h2 class="section-title">Scary US Mystery Movies</h2>
+            
+            <!-- SCROLL CONTAINER: d-flex, flex-nowrap, overflow-x-scroll, gap-3, px-5 -->
+            <div class="d-flex flex-nowrap overflow-x-scroll custom-scroll-track gap-3 px-5">
+                
+                <!-- Item 1 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <!-- Menggunakan placeholder acak dengan resolusi 600x400 -->
+                        <img src="https://picsum.photos/id/111/600/400" class="card-img-content" alt="Poster Horizontal Acak 1">
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/112/600/400" class="card-img-content" alt="Poster Horizontal Acak 2">
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/113/600/400" class="card-img-content" alt="Poster Horizontal Acak 3">
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/114/600/400" class="card-img-content" alt="Poster Horizontal Acak 4">
+                    </div>
+                </div>
+                <!-- Item 5 (Ditambahkan untuk scrolling yang lebih baik) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/115/600/400" class="card-img-content" alt="Poster Horizontal Acak 5">
+                    </div>
+                </div>
+                <!-- Item 6 (Ditambahkan untuk scrolling yang lebih baik) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/116/600/400" class="card-img-content" alt="Poster Horizontal Acak 6">
+                    </div>
+                </div>
+                <!-- Item 7 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/117/600/400" class="card-img-content" alt="Poster Horizontal Acak 7">
+                    </div>
+                </div>
+                <!-- Item 8 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/118/600/400" class="card-img-content" alt="Poster Horizontal Acak 8">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Baris 2: Exciting Western Spy Movies (Format Horizontal Scroll) -->
+        <div class="content-row">
+            <h2 class="section-title">Exciting Western Spy Movies</h2>
+            <div class="d-flex flex-nowrap overflow-x-scroll custom-scroll-track gap-3 px-5">
+                <!-- Item 1 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/201/600/400" class="card-img-content" alt="Poster Horizontal Spy 1">
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/202/600/400" class="card-img-content" alt="Poster Horizontal Spy 2">
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/203/600/400" class="card-img-content" alt="Poster Horizontal Spy 3">
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/204/600/400" class="card-img-content" alt="Poster Horizontal Spy 4">
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/205/600/400" class="card-img-content" alt="Poster Horizontal Spy 5">
+                    </div>
+                </div>
+                <!-- Item 6 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/206/600/400" class="card-img-content" alt="Poster Horizontal Spy 6">
+                    </div>
+                </div>
+                <!-- Item 7 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/207/600/400" class="card-img-content" alt="Poster Horizontal Spy 7">
+                    </div>
+                </div>
+                <!-- Item 8 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/208/600/400" class="card-img-content" alt="Poster Horizontal Spy 8">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Baris 3: Korean TV Dramas (Format Horizontal Scroll) -->
+        <div class="content-row">
+            <h2 class="section-title">Korean TV Dramas about Friendship</h2>
+            <div class="d-flex flex-nowrap overflow-x-scroll custom-scroll-track gap-3 px-5">
+                <!-- Item 1 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/301/600/400" class="card-img-content" alt="Poster Horizontal KDrama 1">
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/302/600/400" class="card-img-content" alt="Poster Horizontal KDrama 2">
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/304/600/400" class="card-img-content" alt="Poster Horizontal KDrama 3">
+                    </div>
+                </div>
+                <!-- Item 4 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/305/600/400" class="card-img-content" alt="Poster Horizontal KDrama 4">
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/306/600/400" class="card-img-content" alt="Poster Horizontal KDrama 5">
+                    </div>
+                </div>
+                <!-- Item 6 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/307/600/400" class="card-img-content" alt="Poster Horizontal KDrama 6">
+                    </div>
+                </div>
+                <!-- Item 7 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/308/600/400" class="card-img-content" alt="Poster Horizontal KDrama 7">
+                    </div>
+                </div>
+                <!-- Item 8 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/309/600/400" class="card-img-content" alt="Poster Horizontal KDrama 8">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Baris 4: My List (Format Horizontal Scroll) -->
+        <div class="content-row">
+            <h2 class="section-title">My List</h2>
+            <div class="d-flex flex-nowrap overflow-x-scroll custom-scroll-track gap-3 px-5">
+                
+                <!-- Item 1: Card Horizontal -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/401/600/400" class="card-img-content" alt="Poster My List Item Acak 1">
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/402/600/400" class="card-img-content" alt="Poster My List Item Acak 2">
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/403/600/400" class="card-img-content" alt="Poster My List Item Acak 3">
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/404/600/400" class="card-img-content" alt="Poster My List Item Acak 4">
+                    </div>
+                </div>
+                
+                <!-- Item 5 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/405/600/400" class="card-img-content" alt="Poster My List Item Acak 5">
+                    </div>
+                </div>
+                
+                <!-- Item 6 (Ditambahkan) -->
+                <div class="scroll-item">
+                    <div class="card bg-dark text-white border-0 shadow-sm card-horizontal-item">
+                        <img src="https://picsum.photos/id/406/600/400" class="card-img-content" alt="Poster My List Item Acak 6">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+
+        <!-- Jarak kosong di akhir konten sebelum footer -->
+        <div style="height: 50px;"></div>
+    </div> <!-- Tutup Container Utama -->
+    
+    <!-- ============================================== -->
+    <!-- BAGIAN 4: FOOTER -->
+    <!-- ============================================== -->
+    <footer class="bg-dark text-white-50 pt-5 pb-4">
+        <div class="container px-5">
+            <!-- Icon Media Sosial -->
+            <div class="mb-4">
+                <a href="#" class="text-white-50 me-3 fs-5" title="Facebook"><span role="img" aria-label="Facebook">📘</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Instagram"><span role="img" aria-label="Instagram">📸</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Twitter/X"><span role="img" aria-label="Twitter">🐦</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Youtube"><span role="img" aria-label="Youtube">▶️</span></a>
+            </div>
+
+            <!-- Tautan Footer Menggunakan Grid -->
+            <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+                <!-- Kolom 1 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Audio Description</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Investor Relations</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Legal Notices</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 2 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Help Center</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Jobs</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Cookie Preferences</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 3 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Gift Cards</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Terms of Use</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Corporate Information</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 4 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Media Center</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Privacy</a></li>
+                        <li><a href="..//Punya Shellyn/contact us.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tombol Layanan Code/Copyright -->
+            <button class="btn btn-outline-secondary btn-sm mb-3">Service Code</button>
+            
+            <!-- Copyright -->
+            <div class="text-muted small">
+                © 2024 FLIXID, Inc.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Memuat file JavaScript Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <!-- Pengaturan dasar untuk tampilan web -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLIXID Games: GTA: San Andreas - The Definitive Edition</title>
+    
+    <!-- Memuat file CSS Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    
+    <!-- Memuat Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
+    <!-- CSS KUSTOM (Disalin dan disesuaikan dari Page 2) -->
+    <style>
+        /* Mengatur seluruh body menggunakan font sans-serif bawaan Bootstrap dan latar belakang hitam */
+        body {
+            background-color: #141414; /* Warna hitam gelap */
+            color: #ffffff; /* Warna teks putih */
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Mengatur navbar agar transparan di bagian atas */
+        .navbar-custom {
+            background-color: rgba(20, 20, 20, 0.9) !important;
+            padding: 1rem 3rem;
+            transition: background-color 0.3s;
+        }
+        
+        /* Gaya untuk logo 'N' besar menggunakan elemen <i> */
+        .logo-icon-n {
+            font-size: 2.5rem;
+            color: #E50914; /* Merah terang khas Netflix */
+            font-weight: 900;
+            line-height: 1;
+            font-style: normal;
+        }
+
+        /* Gaya tambahan untuk emoji/ikon */
+        .icon-small {
+            font-size: 1.25rem;
+            line-height: 1;
+            display: inline-block;
+        }
+        
+        /* ======================================================== */
+        /* GAYA KHUSUS HALAMAN DETAIL GAME */
+        /* ======================================================== */
+
+        /* Gaya untuk Konten Utama (Header Banner) */
+        .hero-banner-game {
+            /* Tinggi minimum agar konten tidak terlalu pendek */
+            min-height: 550px; 
+            background-size: cover;
+            background-position: center top; /* Fokuskan gambar di bagian atas */
+            padding-top: 10rem; /* Jarak dari navbar */
+            padding-bottom: 5rem;
+            position: relative;
+        }
+
+        /* Overlay gelap untuk membuat teks lebih mudah dibaca di atas banner */
+        .hero-banner-game::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            /* Gradient: transparan di atas, gelap di bawah */
+            background: linear-gradient(to bottom, rgba(20, 20, 20, 0.2) 0%, rgba(20, 20, 20, 1) 100%);
+            z-index: 1;
+        }
+        
+        /* Pastikan konten (teks dan tombol) berada di atas overlay */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Gaya untuk card game kecil (untuk bagian "Popular Mobile Games") */
+        .game-card-item {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            overflow: hidden;
+            border-radius: 0.75rem; /* Sudut lebih melengkung */
+            background-color: #222;
+        }
+
+        .game-card-item:hover {
+            transform: scale(1.05); /* Membesar saat di-hover */
+        }
+
+        .game-card-item .card-img-top-game {
+            width: 100%;
+            /* Rasio gambar (kotak 1:1) */
+            aspect-ratio: 1/1; 
+            object-fit: cover;
+            border-radius: 0.75rem 0.75rem 0 0; /* Hanya sudut atas yang melengkung */
+        }
+
+        .game-card-item .card-body {
+            padding: 0.75rem;
+            min-height: 70px; /* Tinggi minimum agar teks tidak bertabrakan */
+        }
+        
+        /* Gaya untuk Judul Game */
+        .game-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            /* Memotong teks jika terlalu panjang */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================== -->
+    <!-- BAGIAN 1: NAVBAR (DISINKRONKAN DARI PAGE 2) -->
+    <!-- ============================================== -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-custom">
+        <div class="container-fluid px-5">
+            <!-- Logo/Nama Brand: Menggunakan tag <i> -->
+            <a class="navbar-brand me-4" href="tampilan.html">
+                <i class="logo-icon-n">NETFLIX</i>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Menu Navigasi -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 fw-semibold">
+                    <li class="nav-item">
+                        <a class="nav-link" href="tampilan.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Shows</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Games</a> <!-- Diubah menjadi aktif -->
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">New & Popular</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">My List</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#">Browse by Languages</a>
+                    </li>
+                </ul>
+                
+                <!-- Search dan User Icon di sisi kanan -->
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="search.html"><span class="icon-small" role="img" aria-label="Cari">🔍</span></a> <!-- Arahkan ke Page 2 -->
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#">Kids</a>
+                    </li>
+                    <li class="nav-item d-none d-lg-block">
+                        <a class="nav-link" href="#"><span class="icon-small" role="img" aria-label="Notifikasi">🔔</span></a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <!-- Dropdown sederhana untuk akun pengguna (Avatar placeholder) -->
+                        <a class="nav-link p-0" href="..//Punya Chelsea/PROFILE/Profile.html">
+                            <img src="https://placehold.co/30x30/606060/ffffff?text=U" class="rounded-2" alt="User Profile" style="width: 30px; height: 30px; object-fit: cover;">
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ============================================== -->
+    <!-- BAGIAN 2: HEADER BANNER (DETAIL GAME) -->
+    <!-- ============================================== -->
+    <header class="hero-banner-game" style="background-image: url('https://picsum.photos/1200/500');">
+        <div class="container-fluid px-5 hero-content">
+            <div class="row">
+                <!-- Kolom Kiri untuk Teks dan Tombol -->
+                <div class="col-lg-6 col-md-8">
+                    <!-- Judul Utama -->
+                    <h1 class="display-5 fw-bold mb-3">GTA: San Andreas - The Definitive Edition</h1>
+                    
+                    <!-- Kategori Game -->
+                    <p class="text-danger fw-semibold mb-2">Mobile Game - Action</p>
+                    <p class="text-white-50 mb-4">Included with your membership.</p>
+                    
+                    <!-- Deskripsi Singkat -->
+                    <p class="lead mb-4" style="max-width: 500px;">
+                        Take control of the streets. Return to your hometown to save your family and clear your name in this 90s West Coast adventure.
+                    </p>
+
+                    <!-- Tombol Aksi -->
+                    <div class="d-flex gap-3">
+                        <button class="btn btn-light btn-lg fw-bold rounded-1">
+                            <span class="icon-small me-2" role="img" aria-label="Dapatkan">⬇️</span> Get Mobile Game
+                        </button>
+                        <button class="btn btn-outline-light btn-lg fw-bold rounded-1">
+                            <span class="icon-small me-2" role="img" aria-label="Info Lebih Lanjut">ℹ️</span> More Info
+                        </button>
+                    </div>
+                </div>
+                <!-- Kolom Kanan (Gambar Latar sudah di CSS background-image) -->
+            </div>
+        </div>
+    </header>
+    
+    <!-- ============================================== -->
+    <!-- BAGIAN 3: KONTEN TAMBAHAN (CARD SECTION) -->
+    <!-- ============================================== -->
+    <div class="container-fluid pt-5 px-5">
+        
+        <!-- SECTION 1: Popular Mobile Games for You -->
+        <h2 class="fw-bold mb-4">Popular Mobile Games for You</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-lg-8 g-3 g-md-4 mb-5 pb-3">
+            <!-- Placeholder Card 1-8 -->
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/201/200/200" class="card-img-top-game" alt="Game 1">
+                    <div class="card-body">
+                        <p class="game-title">Storyteller</p>
+                        <small class="text-muted">Puzzle</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/202/200/200" class="card-img-top-game" alt="Game 2">
+                    <div class="card-body">
+                        <p class="game-title">Squid Game: Unleashed</p>
+                        <small class="text-muted">Arcade</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/203/200/200" class="card-img-top-game" alt="Game 3">
+                    <div class="card-body">
+                        <p class="game-title">Twelve Minutes</p>
+                        <small class="text-muted">Adventure</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/204/200/200" class="card-img-top-game" alt="Game 4">
+                    <div class="card-body">
+                        <p class="game-title">Street Fighter IV CE</p>
+                        <small class="text-muted">Fighting</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-sm-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/205/200/200" class="card-img-top-game" alt="Game 5">
+                    <div class="card-body">
+                        <p class="game-title">Snake.io</p>
+                        <small class="text-muted">Casual</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-sm-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/206/200/200" class="card-img-top-game" alt="Game 6">
+                    <div class="card-body">
+                        <p class="game-title">Bloons TD 6</p>
+                        <small class="text-muted">Strategy</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-lg-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/207/200/200" class="card-img-top-game" alt="Game 7">
+                    <div class="card-body">
+                        <p class="game-title">Football Manager 2024</p>
+                        <small class="text-muted">Sports</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-lg-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/208/200/200" class="card-img-top-game" alt="Game 8">
+                    <div class="card-body">
+                        <p class="game-title">Scriptic: Crime Stories</p>
+                        <small class="text-muted">Interactive</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Pick Up and Play Mobile Games -->
+        <h2 class="fw-bold mb-4">Pick Up and Play Mobile Games</h2>
+        <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 row-cols-lg-8 g-3 g-md-4 mb-5 pb-3">
+            <!-- Placeholder Card 9-16 -->
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/209/200/200" class="card-img-top-game" alt="Game 9">
+                    <div class="card-body">
+                        <p class="game-title">Solitaire</p>
+                        <small class="text-muted">Card Game</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/210/200/200" class="card-img-top-game" alt="Game 10">
+                    <div class="card-body">
+                        <p class="game-title">Word Trails</p>
+                        <small class="text-muted">Word Game</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/211/200/200" class="card-img-top-game" alt="Game 11">
+                    <div class="card-body">
+                        <p class="game-title">Sonic Prime Dash</p>
+                        <small class="text-muted">Endless Runner</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/212/200/200" class="card-img-top-game" alt="Game 12">
+                    <div class="card-body">
+                        <p class="game-title">Cut the Rope Daily</p>
+                        <small class="text-muted">Physics Puzzle</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-sm-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/213/200/200" class="card-img-top-game" alt="Game 13">
+                    <div class="card-body">
+                        <p class="game-title">Kripee Street</p>
+                        <small class="text-muted">Hidden Object</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-sm-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/214/200/200" class="card-img-top-game" alt="Game 14">
+                    <div class="card-body">
+                        <p class="game-title">Nail it! Baking Bash</p>
+                        <small class="text-muted">Simulation</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-lg-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/215/200/200" class="card-img-top-game" alt="Game 15">
+                    <div class="card-body">
+                        <p class="game-title">Heads Up!</p>
+                        <small class="text-muted">Party Game</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col d-none d-lg-block">
+                <div class="card bg-dark text-white border-0 shadow-sm game-card-item">
+                    <img src="https://picsum.photos/id/216/200/200" class="card-img-top-game" alt="Game 16">
+                    <div class="card-body">
+                        <p class="game-title">Pinball Masters</p>
+                        <small class="text-muted">Arcade</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Large Text Area -->
+        <div class="row pt-5 pb-5">
+            <div class="col-lg-8">
+                <h2 class="display-6 fw-bold mb-4">Find more games in the mobile app</h2>
+                <p class="lead text-white-50 fs-4" style="max-width: 700px;">
+                    From familiar favorites to Netflix exclusives, get unlimited mobile games in the Netflix app — all included with your membership.
+                </p>
+            </div>
+            <div class="col-lg-4 d-none d-lg-block">
+                <!-- Placeholder untuk Gambar pendukung (Opsional, dihilangkan agar fokus ke teks) -->
+            </div>
+        </div>
+        
+    </div> <!-- Tutup Container Konten Tambahan -->
+    
+    <!-- ============================================== -->
+    <!-- BAGIAN 4: FOOTER (DISINKRONKAN DARI PAGE 2) -->
+    <!-- ============================================== -->
+    <footer class="bg-dark text-white-50 pt-5 pb-4">
+        <div class="container px-5">
+            <!-- Icon Media Sosial -->
+            <div class="mb-4">
+                <a href="#" class="text-white-50 me-3 fs-5" title="Facebook"><span role="img" aria-label="Facebook">📘</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Instagram"><span role="img" aria-label="Instagram">📸</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Twitter/X"><span role="img" aria-label="Twitter">🐦</span></a>
+                <a href="#" class="text-white-50 me-3 fs-5" title="Youtube"><span role="img" aria-label="Youtube">▶️</span></a>
+            </div>
+
+            <!-- Tautan Footer Menggunakan Grid -->
+            <div class="row row-cols-2 row-cols-md-4 g-3 mb-4">
+                <!-- Kolom 1 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Audio Description</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Investor Relations</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Legal Notices</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 2 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Help Center</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Jobs</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Cookie Preferences</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 3 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Gift Cards</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Terms of Use</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Corporate Information</a></li>
+                    </ul>
+                </div>
+                <!-- Kolom 4 -->
+                <div class="col">
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white-50 text-decoration-none">Media Center</a></li>
+                        <li><a href="#" class="text-white-50 text-decoration-none">Privacy</a></li>
+                        <li><a href="..//Punya Shellyn/contact us.html" class="text-white-50 text-decoration-none">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Tombol Layanan Code/Copyright -->
+            <button class="btn btn-outline-secondary btn-sm mb-3">Service Code</button>
+            
+            <!-- Copyright -->
+            <div class="text-muted small">
+                © 2024 FLIXID, Inc.
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Memuat file JavaScript Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
